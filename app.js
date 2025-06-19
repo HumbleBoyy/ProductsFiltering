@@ -90,8 +90,21 @@ const productElements = [];
 
 // Loop over products and create Html elements
 products.forEach((item)=> {
-  const productElement = document.createElement('div');
+  const productElement = createProductElement(item);
+  productsWrapper.appendChild(productElement);
+  productElements.push(productElement);
 
+  // Add event listener for add to cart button
+  const addToCartButton = productElement.querySelector('.add-to-cart');
+    addToCartButton.addEventListener('click', () => {
+      cartItemCOunt++;
+      cartCount.textContent = cartItemCOunt;
+    });
+})
+
+// Create product element
+function createProductElement(item) {
+  const productElement = document.createElement('div');
   productElement.className = "item space-y-2";
   productElement.innerHTML = `
      <div class="bg-gray-100 flex justify-center items-center relative overflow-hidden group cursor-pointer border rounded-xl">
@@ -103,12 +116,13 @@ products.forEach((item)=> {
   `;
   
   productsWrapper.appendChild(productElement);
-  productElements.push(productElement);
-
+  
   // Add event listener for add to cart button
   const addToCartButton = productElement.querySelector('.add-to-cart');
-    addToCartButton.addEventListener('click', () => {
-      cartItemCOunt++;
-      cartCount.textContent = cartItemCOunt;
-    });
-})
+  addToCartButton.addEventListener('click', () => {
+    cartItemCOunt++;
+    cartCount.textContent = cartItemCOunt;
+  });
+
+  return productElement;
+}
