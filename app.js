@@ -82,7 +82,7 @@ const searchInput = document.getElementById("search");
 const cartCount = document.getElementById("cart-count");
 
 // Initialize cart count
-let cartItemCOunt = 0;
+let cartItemCount = 0;
 
 
 // Initialize product elements array
@@ -93,13 +93,6 @@ products.forEach((item)=> {
   const productElement = createProductElement(item);
   productsWrapper.appendChild(productElement);
   productElements.push(productElement);
-
-  // Add event listener for add to cart button
-  const addToCartButton = productElement.querySelector('.add-to-cart');
-    addToCartButton.addEventListener('click', () => {
-      cartItemCOunt++;
-      cartCount.textContent = cartItemCOunt;
-    });
 })
 
 // Create product element
@@ -109,7 +102,7 @@ function createProductElement(item) {
   productElement.innerHTML = `
      <div class="bg-gray-100 flex justify-center items-center relative overflow-hidden group cursor-pointer border rounded-xl">
         <img src="${item.url}" alt="${item.name}" class="!w-[500px] !h-[170px] object-cover" width="500" height="500">
-        <button class="add-to-cart bg-black text-white absolute bottom-0 left-0 right-0 text-center py-2 translate-y-full transition group-hover:translate-y-0">Add To Cart</button>
+        <button class="status bg-black text-white absolute bottom-0 left-0 right-0 text-center py-2 translate-y-full transition group-hover:translate-y-0">Add To Cart</button>
     </div>
     <p>${item.name}</p>
     <strong>Price: $${item.price.toFixed(2)}</strong>
@@ -118,11 +111,29 @@ function createProductElement(item) {
   productsWrapper.appendChild(productElement);
   
   // Add event listener for add to cart button
-  const addToCartButton = productElement.querySelector('.add-to-cart');
-  addToCartButton.addEventListener('click', () => {
-    cartItemCOunt++;
-    cartCount.textContent = cartItemCOunt;
-  });
+   productElement.querySelector('.status').addEventListener('click', updateCart);
 
   return productElement;
+}
+
+// Add or Remove Item from Cart
+function updateCart(e) {
+  const statueEl = e.target;
+
+  if (statueEl.classList.contains('added')) {
+    statueEl.classList.remove('added');
+    statueEl.textContent = 'Add To Cart';
+    statueEl.classList.add('bg-gray-800');
+    statueEl.classList.remove('bg-red-600')
+    cartItemCount--;
+  } else {
+    statueEl.classList.add('added');
+    statueEl.textContent = 'Remove From Cart';
+    statueEl.classList.remove('bg-gray-800');
+    statueEl.classList.add('bg-red-600')
+    cartItemCount++;
+  }
+
+  // Update Cart Item Count
+  cartCount.innerText = cartItemCount.toString()
 }
