@@ -88,6 +88,12 @@ let cartItemCount = 0;
 // Initialize product elements array
 const productElements = [];
 
+// Event listener for filtering
+filterContainer.addEventListener('change', filterProduct);
+// Event listener for search input 
+searchInput.addEventListener('input', filterProduct);
+
+
 // Loop over products and create Html elements
 products.forEach((item)=> {
   const productElement = createProductElement(item);
@@ -136,4 +142,27 @@ function updateCart(e) {
 
   // Update Cart Item Count
   cartCount.innerText = cartItemCount.toString()
+}
+
+// Filter products based on selected categories and search input
+
+function filterProduct(){
+   const searchTerm = searchInput.value.trim().toLowerCase();
+   const chechkedCategories = Array.from(checkboxs).filter((item)=> item.checked).map((item)=> item.id);
+   
+  //  Loop over products and check for matches
+  productElements.forEach((item, index) => {
+    const product = products[index];
+
+    // Check to see if the product matches the search or the checked categories
+    const matchesSearchTerm = product.name.toLowerCase().includes(searchTerm);
+    const isInCheckedCategory = chechkedCategories.length === 0 || chechkedCategories.includes(product.category);
+
+    // Show or hide product based on matches
+    if(matchesSearchTerm && isInCheckedCategory){
+      item.classList.remove('hidden');
+    }else{
+      item.classList.add('hidden')
+    }
+  })
 }
